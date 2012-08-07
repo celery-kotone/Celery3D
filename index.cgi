@@ -17,5 +17,7 @@ div{position:absolute;}
 <script type="text/javascript" src="./src/scroll.js"></script>
 <script type="text/javascript" src="./src/main.js"></script>
 <div id="canvas-wrapper" align="center"></div>
+<div id="sound_element"></div>
+<div id="rotation" align="center"></div>
 );
 print $cgi->end_html();

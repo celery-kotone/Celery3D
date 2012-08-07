@@ -1,5 +1,5 @@
-width = getBrowserWidth() * 0.99;
-height = getBrowserHeight() * 0.99;
+var width = getBrowserWidth() * 0.99;
+var height = getBrowserHeight() * 0.99;
 
 var geometry = new THREE.CubeGeometry(250, 250, 0);
 var mesh     = new Array;
@@ -7,14 +7,19 @@ var texture  = new THREE.ImageUtils.loadTexture('./img/test.png');
 var material = new THREE.MeshBasicMaterial({map: texture});
 material.transparent = true;
 
-for(var i = 0; i < 10; i++){
+var max = 12;
+var theta = 2 * Math.PI / max;
+var r = 1000;
+
+for(var i = 0; i < max; i++){
     mesh[i] = new THREE.Mesh(geometry, material);
-    mesh[i].position.z = 400;
-    mesh[i].position.x = i * 300 - 1500;
+    mesh[i].position.x = Math.sin(theta * i) * r;
+    mesh[i].position.z = Math.cos(theta * i) * r;
+    mesh[i].rotation.y = theta * i;
 }
 
+
 var camera   = new THREE.PerspectiveCamera(40, width / height, 1, 10000);
-camera.lookAt(mesh[10/2].position);
 
 var scene    = new THREE.Scene();
 for(var i in mesh){
@@ -28,18 +33,21 @@ scene.add(light);
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(width, height);
 
+//event stuff
 var mousedown = false;
+var projector = new THREE.Projector();
 renderer.domElement.addEventListener('mousedown', function(e){
-	mousedown = true;
-	prevPosition = {x: e.pageX, y: e.pageY};
-    }, false);
+	var mouse_x =   ((e.pageX-e.target.offsetParent.offsetLeft) / renderer.domElement.width)  * 2 - 1;
+	var mouse_y = - ((e.pageY-e.target.offsetParent.offsetTop) / renderer.domElement.height) * 2 + 1;
+	var vector = new THREE.Vector3(mouse_x, mouse_y, 0.5);
+	projector.unprojectVector(vector, camera);
 
-renderer.domElement.addEventListener('mousemove', function(e){
-	if(!mousedown) return;
-	moveDistance = {x: prevPosition.x - e.pageX, y: prevPosition.y - e.pageY};
-	
-	prevPosition = {x: e.pageX, y: e.pageY};
-	render();
+	var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
+	var obj = ray.intersectObjects(mesh);
+
+	if(obj.length > 0){
+	    document.getElementById("sound_element").innerHTML= "<embed src='./se/select.wav' hidden=true autostart=true loop=false>";
+	}
     }, false);
 
 renderer.domElement.addEventListener('mouseup', function(e){
@@ -47,7 +55,7 @@ renderer.domElement.addEventListener('mouseup', function(e){
     }, false);
 
 function handle(delta){
-	camera.rotation.y -= delta * 0.01;
+    camera.rotation.y -= delta * 0.01;
 }
 
 function render(){
@@ -65,6 +73,8 @@ function animate(){
     }
     render();
 }
+
+var focus = 0;
 
 window.onload = function(){
     document.getElementById('canvas-wrapper').appendChild(renderer.domElement);
