@@ -12,7 +12,7 @@ print q(
 div{position:absolute;}
 .a{top:0px;left;0px}
 </style>
-<script type="text/javascript" src="./src/three.js/build/Three.js"></script>
+<script type="text/javascript" src="./src/Three.js"></script>
 <script type="text/javascript" src="./src/scroll.js"></script>
 <script type="text/javascript" src="./src/main.js"></script>
 <div id="canvas-wrapper"></div>
