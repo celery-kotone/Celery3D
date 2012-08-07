@@ -14,6 +14,7 @@ for(var i = 0; i < 10; i++){
 }
 
 var camera   = new THREE.PerspectiveCamera(40, width / height, 1, 10000);
+camera.lookAt(mesh[10/2].position);
 
 var scene    = new THREE.Scene();
 for(var i in mesh){
