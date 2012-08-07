@@ -1,10 +1,17 @@
 var width = getBrowserWidth() * 0.99;
 var height = getBrowserHeight() * 0.99;
 
-var geometry = new THREE.CubeGeometry(250, 250, 0);
+var geometry = new THREE.CubeGeometry(250, 250, 1);
 var mesh     = new Array;
 var texture  = new THREE.ImageUtils.loadTexture('./img/test.png');
 var material = new THREE.MeshBasicMaterial({map: texture});
+var sphmat   = new THREE.MeshLambertMaterial({color: 0x0000aa});
+var sphere   = new THREE.Mesh(new THREE.SphereGeometry(2000, 100, 100), new THREE.MeshLambertMaterial({color: 0xffffff}));
+var focus = 0;
+sphere.doubleSided = true;
+sphere.position.x = 0;
+sphere.position.y = 0;
+sphere.position.z = 0;
 material.transparent = true;
 
 var max = 12;
@@ -18,16 +25,16 @@ for(var i = 0; i < max; i++){
     mesh[i].rotation.y = theta * i;
 }
 
-
 var camera   = new THREE.PerspectiveCamera(40, width / height, 1, 10000);
 
 var scene    = new THREE.Scene();
 for(var i in mesh){
     scene.add(mesh[i]);
 }
+scene.add(sphere);
 
-var light    = new THREE.DirectionalLight(0xffffff, 1.5);
-light.position = {x:0, y:0.2, z:-1};
+var light    = new THREE.PointLight(0xffffff, 1.5);
+light.position = {x:0, y:100, z:0};
 scene.add(light);
 
 var renderer = new THREE.WebGLRenderer();
@@ -47,6 +54,7 @@ renderer.domElement.addEventListener('mousedown', function(e){
 
 	if(obj.length > 0){
 	    document.getElementById("sound_element").innerHTML= "<embed src='./se/select.wav' hidden=true autostart=true loop=false>";
+	    focus = obj[0].object.position;
 	}
     }, false);
 
@@ -71,10 +79,12 @@ function animate(){
     for(var i in mesh){
 	mesh[i].rotation.z -= 0.01 * accel[i];
     }
+    if(focus != 0){
+	camera.lookAt(focus);
+	focus = 0;
+    }
     render();
 }
-
-var focus = 0;
 
 window.onload = function(){
     document.getElementById('canvas-wrapper').appendChild(renderer.domElement);
