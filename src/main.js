@@ -1,5 +1,5 @@
-var width  = document.documentElement.clientWidth - 100;
-var height = document.documentElement.clientHeight - 100;
+width = getBrowserWidth() * 0.99;
+height = getBrowserHeight() * 0.99;
 
 var geometry = new THREE.CubeGeometry(250, 250, 0);
 var mesh     = new Array;
