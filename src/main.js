@@ -28,10 +28,11 @@ function init() {
 }
  
 function initScene() {
-    var geometry = new THREE.CubeGeometry(250, 250, 1);
+    var geometry = new THREE.CubeGeometry(250, 250, 0);
     var mesh     = new Array;
     var texture  = new THREE.ImageUtils.loadTexture('./img/test.png');
     var material = new THREE.MeshBasicMaterial({map: texture});
+    material.transparent = true;
     var max = 12;
     var theta = 2 * Math.PI / max;
     var r = 1000;
