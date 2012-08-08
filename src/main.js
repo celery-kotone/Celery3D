@@ -12,30 +12,33 @@ animate();
 function init() {
     scene = new THREE.Scene();
  
-    camera = new THREE.PerspectiveCamera( 75, width / height, 1, 10000 );
-    camera.position.z = 1000;
-    scene.add( camera );
+    camera = new THREE.PerspectiveCamera(75, width / height, 1, 10000);
+    camera.position.z = 100;
+    scene.add(camera);
  
-    material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
- 
-    div_canvas = document.getElementById( 'rotation' );
+    div_canvas = document.getElementById('rotation');
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( width, height );
+    renderer.setSize(width, height);
  
-    div_canvas.appendChild( renderer.domElement );
+    div_canvas.appendChild(renderer.domElement);
  
-    controls = new THREE.TrackballControls( camera, renderer.domElement );
+    controls = new THREE.TrackballControls(camera, renderer.domElement);
 }
  
 function initScene() {
-    var geometry = new THREE.CubeGeometry(250, 250, 0);
+    var geometry = new THREE.SphereGeometry(100, 10, 10);
+    var geobg    = new THREE.PlaneGeometry(10000, 10000, 10, 10);
     var mesh     = new Array;
-    var texture  = new THREE.ImageUtils.loadTexture('./img/test.png');
-    var material = new THREE.MeshBasicMaterial({map: texture});
+    //var texture  = new THREE.ImageUtils.loadTexture('./img/test.png');
+    var material = new THREE.MeshBasicMaterial({wireframe: true, color: 0xff0000});
     material.transparent = true;
     var max = 12;
     var theta = 2 * Math.PI / max;
-    var r = 1000;
+    var r = 750;
+
+    var ground = new THREE.Mesh(geobg, material);
+    ground.position.y = -300;
+    scene.add(ground);
 
     for(var i = 0; i < max; i++){
 	mesh[i] = new THREE.Mesh(geometry, material);
