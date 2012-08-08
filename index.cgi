@@ -12,12 +12,12 @@ print q(
 div{position:absolute;}
 .a{top:0px;left;0px}
 </style>
+<div id="canvas" align="center"></div>
+<div id="sound_element"></div>
+<div id="rotation" align="center"></div>
 <script type="text/javascript" src="./src/Three.js"></script>
 <script type="text/javascript" src="./src/windowSize.js"></script>
 <script type="text/javascript" src="./src/scroll.js"></script>
 <script type="text/javascript" src="./src/main.js"></script>
-<div id="canvas-wrapper" align="center"></div>
-<div id="sound_element"></div>
-<div id="rotation" align="center"></div>
 );
 print $cgi->end_html();
