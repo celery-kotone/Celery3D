@@ -15,8 +15,8 @@ window.onload = function(){
 function init() {
     scene = new THREE.Scene();
  
-    camera = new THREE.PerspectiveCamera(75, width / height, 1, 10000);
-    camera.position.z = 2000;
+    camera = new THREE.PerspectiveCamera(75, width / height, 1, 100000);
+    camera.position.z = 20000;
     scene.add(camera);
  
     div_canvas = document.getElementById('rotation');
@@ -30,23 +30,22 @@ function init() {
 }
  
 function initScene() {
-    var geometry = new THREE.SphereGeometry(10, 10, 10);
-    var geobg    = new THREE.PlaneGeometry(10000, 10000, 10, 10);
+    var geometry = new THREE.SphereGeometry(600, 10, 10);
+    var geosun   = new THREE.SphereGeometry(6000, 10, 10);
     //var texture  = new THREE.ImageUtils.loadTexture('./img/test.png');
     var material = new THREE.MeshBasicMaterial({wireframe: true, color: 0xff0000});
     material.transparent = true;
-    var max = 120;
+    var max = 9;
     var theta = 2 * Math.PI / max;
-    var r = 1000;
+    var r = 10000;
 
-    var ground = new THREE.Mesh(geobg, material);
-    ground.position.y = -300;
-    scene.add(ground);
+    sun = new THREE.Mesh(geosun, material);
+    scene.add(sun);
 
     for(var i = 0; i < max; i++){
 	mesh[i] = new THREE.Mesh(geometry, material);
-	mesh[i].position.x = Math.sin(theta * i) * r;
-	mesh[i].position.z = Math.cos(theta * i) * r;
+	mesh[i].position.x = Math.sin(theta * i) * (r + 2000);
+	mesh[i].position.z = Math.cos(theta * i) * (r + 2000);
 	scene.add(mesh[i]);
     }
 }
@@ -56,6 +55,7 @@ function handle(delta){
 }
 
 function meshMove(){
+    sun.rotation.y += 0.001;
     for(var i in mesh){
 	mesh[i].rotation.y += 0.01;
     }
