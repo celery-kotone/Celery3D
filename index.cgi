@@ -17,7 +17,6 @@ div{position:absolute;}
 <div id="rotation" align="center"></div>
 <script type="text/javascript" src="./src/Three.js"></script>
 <script type="text/javascript" src="./src/windowSize.js"></script>
-<script type="text/javascript" src="./src/scroll.js"></script>
 <script type="text/javascript" src="./src/main.js"></script>
 );
 print $cgi->end_html();
