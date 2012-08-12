@@ -36,7 +36,6 @@ Node = function(geometry, material, scene){
 		thisNode.y2 = Math.pow(thisNode.child[i].mesh.position.y - thisNode.mesh.position.y, 2);
 		thisNode.z2 = Math.pow(thisNode.child[i].mesh.position.z - thisNode.mesh.position.z, 2);
 		thisNode.distance = Math.sqrt(thisNode.x2 + thisNode.y2 + thisNode.z2);
-		document.getElementById('rotation').innerHTML = thisNode.distance + " " + thisNode.child[i].ready;
 		if(thisNode.distance < thisNode.radius){
 		    thisNode.child[i].mesh.position.x += Math.cos(thisNode.theta * i) * Math.sqrt(thisNode.radius - thisNode.distance);
 		    thisNode.child[i].mesh.position.z += Math.sin(thisNode.theta * i) * Math.sqrt(thisNode.radius - thisNode.distance);
