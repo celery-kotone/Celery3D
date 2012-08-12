@@ -40,7 +40,7 @@ function initScene() {
 }
 
 function render(){
-    document.getElementById('rotation').innerHTML = node.clicked;
+    //document.getElementById('rotation').innerHTML = node.clicked;
     node.update();
     controls.update();
     renderer.render(scene, camera);

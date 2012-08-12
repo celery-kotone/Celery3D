@@ -1,6 +1,6 @@
 createNode = function(geometry, material){
     this.mesh = new THREE.Mesh(geometry, material);
-    this.projector = new THREE.Projector();
+    var thisNode = this;
 
     this.child = [];
     this.clicked = 0;
@@ -19,15 +19,16 @@ createNode = function(geometry, material){
     };
 
     this.mouse = function(e){
+	this.projector = new THREE.Projector();
 	this.mouse_x =   ((e.pageX-e.target.offsetParent.offsetLeft) / renderer.domElement.width)  * 2 - 1;
 	this.mouse_y = - ((e.pageY-e.target.offsetParent.offsetTop) / renderer.domElement.height) * 2 + 1;
 	this.vector = new THREE.Vector3(this.mouse_x, this.mouse_y, 0.5);
 	this.projector.unprojectVector(this.vector, camera);
 	
 	this.ray = new THREE.Ray(camera.position, this.vector.subSelf(camera.position).normalize());
-	this.obj = this.ray.intersectObjects([this.mesh]);
+	this.obj = this.ray.intersectObjects([thisNode.mesh]);
 	if(this.obj.length > 0){
-	    clicked += 1;
+	    thisNode.clicked += 1;
 	}
     };
 };
