@@ -1,11 +1,17 @@
-createNode = function(geometry, material){
+createNode = function(geometry, material, scene){
     var thisNode = this;
 
     thisNode.mesh      = new THREE.Mesh(geometry, material);
     thisNode.projector = new THREE.Projector();
 
-    thisNode.child   = [];
-    thisNode.clicked = 0;
+    scene.add(thisNode.mesh);
+
+    thisNode.child      = [];
+    thisNode.childId    = [];
+    thisNode.clicked    = 0;
+    thisNode.isChild    = 0;
+    thisNode.theta      = 0;
+    thisNode.generation = 0;
 
     thisNode.update = function(){
 
@@ -16,6 +22,13 @@ createNode = function(geometry, material){
 	    }
 	}
 
+	//POSITION CHILD NODES
+	if(thisNode.child.length > 0){
+	    for(var i in thisNode.child){
+		thisNode.child[i].mesh.position.x = 300;
+	    }
+	}
+
 	//CHECK COLLISION
 	renderer.domElement.addEventListener('mousedown', thisNode.mouse, false);
 
@@ -23,14 +36,22 @@ createNode = function(geometry, material){
 	thisNode.mesh.rotation.y = ((thisNode.mesh.rotation.y.toFixed(2) * 100) % (Math.PI.toFixed(2) * 100) + 1) / 100;
 
 	//RESCALE MESH
-	if(thisNode.clicked && thisNode.mesh.scale.x < 5){
-	    thisNode.mesh.scale.x += 0.2;
-	    thisNode.mesh.scale.y += 0.2;
-	    thisNode.mesh.scale.z += 0.2;
-	}else if(!thisNode.clicked && thisNode.mesh.scale.x > 1){
-	    thisNode.mesh.scale.x -= 0.2;
-	    thisNode.mesh.scale.y -= 0.2;
-	    thisNode.mesh.scale.z -= 0.2;
+	if(thisNode.clicked){
+	    if(thisNode.child.length < 1){
+		thisNode.createChild(1, geometry, material, scene);
+	    }
+	    if(thisNode.mesh.scale.x < 2){
+		thisNode.mesh.scale.x += 0.1;
+		thisNode.mesh.scale.y += 0.1;
+		thisNode.mesh.scale.z += 0.1;
+	    }
+	}else{
+	    thisNode.removeChild();
+	    if(thisNode.mesh.scale.x > 1){
+		thisNode.mesh.scale.x -= 0.1;
+		thisNode.mesh.scale.y -= 0.1;
+		thisNode.mesh.scale.z -= 0.1;
+	    }
 	}
     };
 
@@ -48,6 +69,19 @@ createNode = function(geometry, material){
 	    }else{
 		thisNode.clicked = 1;
 	    }
+	}
+    };
+
+    thisNode.createChild = function(max, geometry, material, scene){
+	for(var i = 0; i < max; i++){
+	    thisNode.child[i] = new createNode(geometry, material, scene);
+	    thisNode.childId[i] = thisNode.child[i].mesh.id;
+	}
+    };
+
+    thisNode.removeChild = function(){
+	for(var i = 0; i < thisNode.child; i++){
+	    scene.remove(thisNode.childId[i]);
 	}
     };
 };
