@@ -16,7 +16,7 @@ div{position:absolute;}
 <div id="sound_element"></div>
 <div id="rotation" align="center"></div>
 <script type="text/javascript" src="./src/Three.js"></script>
-<script type="text/javascript" src="./src/node.js"></script>
+<script type="text/javascript" src="./src/createNode.js"></script>
 <script type="text/javascript" src="./src/windowSize.js"></script>
 <script type="text/javascript" src="./src/main.js"></script>
 );
