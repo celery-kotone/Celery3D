@@ -6,9 +6,12 @@ createNode = function(geometry, material){
     var mesh = this.mesh;
 
     this.update = function(){
+	//RECURSIVELY UPDATE CHILD NODES
 	if(this.child.length > 0){
 	    this.child.update();
 	}
+
+	//CHECK COLLISION
 	var projector = new THREE.Projector();
 	renderer.domElement.addEventListener('mousedown', function(e){
 		this.mouse_x =   ((e.pageX-e.target.offsetParent.offsetLeft) / renderer.domElement.width)  * 2 - 1;
@@ -22,6 +25,8 @@ createNode = function(geometry, material){
 		    clicked += 1;
 		}
 	    }, false);
+
+	//ROTATE MESH
 	this.mesh.rotation.y = ((this.mesh.rotation.y.toFixed(2) * 100) % (Math.PI.toFixed(2) * 100) + 1) / 100;
     }
 };
