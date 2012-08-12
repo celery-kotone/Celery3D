@@ -116,13 +116,23 @@ Node = function(geometry, material, scene){
 	for(var i = 0; i < max; i++){
 	    thisNode.child[i] = new Node(geometry, material, scene);
 	    thisNode.child[i].ready = 0;
-	    //thisNode.child[i].mesh.position = thisNode.mesh.position;
+	    thisNode.child[i].mesh.position.x = thisNode.mesh.position.x;
+	    thisNode.child[i].mesh.position.y = thisNode.mesh.position.y;
+	    thisNode.child[i].mesh.position.z = thisNode.mesh.position.z;
 	}
     };
 
     thisNode.removeChild = function(){
 	for(var i = 0; i < thisNode.child.length; i++){
+	    if(thisNode.child[i].child.length != 0){
+		thisNode.child[i].removeChild();
+	    }
 	    if(thisNode.child[i].mesh.scale.x > 0){
+		if(thisNode.child[i].clicked){
+		    thisNode.child[i].mesh.scale.x -= 0.2;
+		    thisNode.child[i].mesh.scale.y -= 0.2;
+		    thisNode.child[i].mesh.scale.z -= 0.2;
+		}
 		thisNode.child[i].mesh.scale.x -= 0.1;
 		thisNode.child[i].mesh.scale.y -= 0.1;
 		thisNode.child[i].mesh.scale.z -= 0.1;
