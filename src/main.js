@@ -17,7 +17,7 @@ function init() {
     scene = new THREE.Scene();
  
     camera = new THREE.PerspectiveCamera(75, width / height, 1, 10000);
-    camera.position.z = 500;
+    camera.position.z = 1500;
     scene.add(camera);
  
     div_canvas = document.getElementById('canvas');
@@ -35,13 +35,10 @@ function initScene() {
     var geometry = new THREE.SphereGeometry(100, 10, 10);
     var material = new THREE.MeshBasicMaterial({wireframe: true, color: 0x6060ff});
     material.transparent = true;
-    node = new createNode(geometry, material, scene);
+    node = new Node(geometry, material, scene);
 }
 
 function render(){
-    if(node.child.length > 0){
-	document.getElementById('rotation').innerHTML = node.childId[0];
-    }
     node.update();
     controls.update();
     renderer.render(scene, camera);
