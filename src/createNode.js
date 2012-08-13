@@ -14,12 +14,9 @@ Node = function(geometry, material, scene){
     thisNode.generation = 0;
     thisNode.radius     = 800;
     thisNode.ready      = 1;
+    thisNode.hasChild   = 0;
 
     thisNode.update = function(){
-
-	if(!thisNode.ready){
-	    return;
-	}
 
 	//RECURSIVELY UPDATE CHILD NODES
 	if(thisNode.child.length > 0){
@@ -56,25 +53,27 @@ Node = function(geometry, material, scene){
 
 	//CREATE/REMOVE CHILD NODES
 	if(thisNode.clicked){
-	    if(thisNode.child.length == 0){
+	    if(!thisNode.hasChild && thisNode.ready){
 		thisNode.createChild(6, geometry, material, scene);
+		thisNode.hasChild = 1;
 	    }
 	}else{
+	    thisNode.hasChild = 0;
 	    thisNode.removeChild();
 	}
 
 	//RESIZE NODE
 	if(thisNode.move || thisNode.clicked){
 	    if(thisNode.mesh.scale.x < 2){
-		thisNode.mesh.scale.x += 0.1;
-		thisNode.mesh.scale.y += 0.1;
-		thisNode.mesh.scale.z += 0.1;
+		thisNode.mesh.scale.x += (Math.pow(2 - thisNode.mesh.scale.x, 1/2)) * 0.07;
+		thisNode.mesh.scale.y += (Math.pow(2 - thisNode.mesh.scale.y, 1/2)) * 0.07;
+		thisNode.mesh.scale.z += (Math.pow(2 - thisNode.mesh.scale.z, 1/2)) * 0.07;
 	    }
 	}else{
 	    if(thisNode.mesh.scale.x > 1){
-		thisNode.mesh.scale.x -= 0.1;
-		thisNode.mesh.scale.y -= 0.1;
-		thisNode.mesh.scale.z -= 0.1;
+		thisNode.mesh.scale.x -= (Math.pow(thisNode.mesh.scale.x - 1, 1/2)) * 0.07;
+		thisNode.mesh.scale.y -= (Math.pow(thisNode.mesh.scale.y - 1, 1/2)) * 0.07;
+		thisNode.mesh.scale.z -= (Math.pow(thisNode.mesh.scale.z - 1, 1/2)) * 0.07;
 	    }
 	}
     };
@@ -126,20 +125,16 @@ Node = function(geometry, material, scene){
 	    if(thisNode.child[i].child.length != 0){
 		thisNode.child[i].removeChild();
 	    }
-	    if(thisNode.child[i].mesh.scale.x > 0){
-		if(thisNode.child[i].clicked){
-		    thisNode.child[i].mesh.scale.x -= 0.2;
-		    thisNode.child[i].mesh.scale.y -= 0.2;
-		    thisNode.child[i].mesh.scale.z -= 0.2;
-		}
-		thisNode.child[i].mesh.scale.x -= 0.1;
-		thisNode.child[i].mesh.scale.y -= 0.1;
-		thisNode.child[i].mesh.scale.z -= 0.1;
+	    if(thisNode.child[i].mesh.scale.x * thisNode.child[i].mesh.scale.y * thisNode.child[i].mesh.scale.z > 0){
+		thisNode.child[i].mesh.scale.x -= 0.07 * (1 + thisNode.child[i].clicked * 2);
+		thisNode.child[i].mesh.scale.y -= 0.07 * (1 + thisNode.child[i].clicked * 2);
+		thisNode.child[i].mesh.scale.z -= 0.07 * (1 + thisNode.child[i].clicked * 2);
+		continue;
 	    }else{
+		thisNode.child[i].mesh.scale.x = 0;
+		thisNode.child[i].mesh.scale.y = 0;
+		thisNode.child[i].mesh.scale.z = 0;
 		scene.remove(thisNode.child[i].mesh);
-		if(i == thisNode.child.length - 1){
-		    thisNode.child.length = 0;
-		}
 	    }
 	}
     };
